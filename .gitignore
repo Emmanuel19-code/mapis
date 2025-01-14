@@ -1,0 +1,55 @@
+# .NET Core
+## User-specific files
+*.[Cc]ache
+.vs/
+.vscode/
+.idea/
+
+# Build results
+bin/
+obj/
+
+# User-specific files for Visual Studio for Mac
+.vscode/
+.idea/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer files (for VS)
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# JetBrains Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# .NET Core Secrets
+.microsoft/
+
+# Build output directories
+/out/
+/build/
+
+# Rider IDE
+.idea/
+
+# .NET SDK's generated assets
+.nuget/
+
+# Windows Installer files (for VS)
+*.cab
+*.msi
+*.msm
+*.msp
+
+# ASP.NET Core
+appsettings.json
+appsettings.Development.json
