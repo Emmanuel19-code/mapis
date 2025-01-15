@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mapis.Infrastructure;
 
@@ -11,9 +12,11 @@ using mapis.Infrastructure;
 namespace mapis.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250115100958_initializingdb7")]
+    partial class initializingdb7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,9 +25,9 @@ namespace mapis.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("mapis.Domain.Applicants", b =>
+            modelBuilder.Entity("mapis.Domain.CILTUser", b =>
                 {
-                    b.Property<Guid>("ApplicantId")
+                    b.Property<Guid>("CILTUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -48,9 +51,6 @@ namespace mapis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateApplied")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("DateJoinedOrganisation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -66,9 +66,6 @@ namespace mapis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -76,73 +73,8 @@ namespace mapis.Migrations
                     b.Property<int>("LastPaymentYear")
                         .HasColumnType("int");
 
-                    b.Property<string>("MemberType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneOne")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneTwo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ApplicantId");
-
-                    b.ToTable("Applicants");
-                });
-
-            modelBuilder.Entity("mapis.Domain.CILTUser", b =>
-                {
                     b.Property<string>("MemberId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("BranchWant")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BusinessAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentJobTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentMemberShipBranch")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DateJoinedOrganisation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ExperienceInLogistics")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LastPaymentYear")
-                        .HasColumnType("int");
 
                     b.Property<string>("MemberType")
                         .HasColumnType("nvarchar(max)");
@@ -157,7 +89,7 @@ namespace mapis.Migrations
                     b.Property<string>("PhoneTwo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MemberId");
+                    b.HasKey("CILTUserId");
 
                     b.ToTable("CiltUser");
                 });
@@ -168,9 +100,8 @@ namespace mapis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CILTUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("CILTUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -203,15 +134,12 @@ namespace mapis.Migrations
                     b.Property<Guid>("CILTUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CILTUserMemberId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("EventRegistrationId");
 
-                    b.HasIndex("CILTUserMemberId");
+                    b.HasIndex("CILTUserId");
 
                     b.HasIndex("EventId");
 
@@ -276,7 +204,9 @@ namespace mapis.Migrations
                 {
                     b.HasOne("mapis.Domain.CILTUser", "CILTUser")
                         .WithMany()
-                        .HasForeignKey("CILTUserMemberId");
+                        .HasForeignKey("CILTUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("mapis.Domain.Events", "Event")
                         .WithMany()

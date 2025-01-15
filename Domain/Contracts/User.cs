@@ -48,4 +48,9 @@ namespace mapis.Domain
     {
         public string MemberId {get;set;}
     }
+
+    public class UserEventsRegistered
+    {
+        public required Guid CILTUserId  {get;set;}
+    }
 }

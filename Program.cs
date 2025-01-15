@@ -10,8 +10,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase")));
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IEvents,Event>();
+builder.Services.AddScoped<IApplicantsService,ApplicantService>();
 
 var app = builder.Build();
 

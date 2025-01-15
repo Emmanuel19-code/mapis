@@ -14,6 +14,7 @@ namespace mapis.Infrastructure
         public DbSet<CILTUserAuth> CILTUserAuths {get;set;}
         public DbSet<Events> Events {get;set;}
         public DbSet<EventRegistration> RegisterEvents {get;set;}
+        public DbSet<Applicants> Applicants {get;set;}
     }
 }
 

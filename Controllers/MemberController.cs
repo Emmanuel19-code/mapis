@@ -4,28 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace mapis.Controllers
 {
-    [Route("/api/member/controller")]
-    [ApiController]
-    public class MemberController : ControllerBase
+  [Route("/api/member")]
+  [ApiController]
+  public class MemberController : ControllerBase
+  {
+    
+
+    [HttpGet]
+
+
+    [HttpPost("register")]
+    public async Task<ActionResult> RegisterUser(BeComeMember request)
     {
-      private readonly IUserService _userService;
-      public MemberController(IUserService userService)
-      {
-            _userService = userService;
-      }
-
-      [HttpGet]
-      
-
-      [HttpPost("register")]
-      public async Task<ActionResult> RegisterUser(BeComeMember request)
-      {
-        var response = await _userService.CreateAccount(request);
-        if(!response.Success)
-        {
-            return BadRequest(response);
-        }
-        return Ok(response);
-      }
+      return Ok();
     }
+
+    [HttpPost("myEvents")]
+    public async Task<ActionResult> MyEvents(UserEventsRegistered request)
+    {
+       return Ok();
+    }
+  }
 }

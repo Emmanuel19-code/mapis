@@ -7,6 +7,7 @@ namespace mapis.Services
         Task<CreatedResponse> CreateAccount(BeComeMember request);
         Task Login(AccountLogin request);
         Task<UserDetails> GetUserDetails(GetUserDetailsInfo request);
-        Task UpdatePassord(); 
+        Task UpdatePassord();
+        Task<List<AllEvents>> GetRegisteredEvents(UserEventsRegistered request);
     }
 }
