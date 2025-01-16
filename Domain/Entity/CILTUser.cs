@@ -10,6 +10,7 @@ namespace mapis.Domain
         public required string FirstName {get;set;}
         public string? MiddleName {get;set;}
         public required string LastName {get;set;}
+        public string ProfileImage {get;set;}
         public string? MemberType {get;set;}
         public required string Email {get;set;}
         public required string Country {get;set;}
