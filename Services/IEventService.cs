@@ -2,7 +2,7 @@ using mapis.Domain;
 
 namespace mapis.Services
 {
-    public interface IEvents
+    public interface IEventService
     {
         Task<List<AllEvents>> GetEvents();
         Task<CreatedResponse> AddEvent(UploadEvent request);

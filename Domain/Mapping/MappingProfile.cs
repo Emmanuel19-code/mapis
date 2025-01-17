@@ -8,6 +8,7 @@ namespace mapis.Domain
         {
             CreateMap<Applicants,ApplicantsInfo>();
             CreateMap<Applicants,CILTUser>();
+            
         }
     }
 }

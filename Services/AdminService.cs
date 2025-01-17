@@ -15,7 +15,7 @@ namespace mapis.Services
         private readonly IMapper _mapper;
         private readonly ILogger<AdminServices> _logger;
         private readonly IConfiguration _configuration;
-        public AdminServices(ApplicationDbContext context, IMapper mapper, ILogger<AdminServices> logger,IConfiguration configuration)
+        public AdminServices(ApplicationDbContext context, IMapper mapper, ILogger<AdminServices> logger, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
@@ -27,7 +27,7 @@ namespace mapis.Services
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
-                
+
                 return new AdminLoginResponse
                 {
                     StatusCode = 401,
@@ -35,8 +35,8 @@ namespace mapis.Services
                     AccessToken = null
                 };
             }
-            var admin = await _context.Admins.FirstOrDefaultAsync(u=>u.Username == request.Email);
-            if(admin == null)
+            var admin = await _context.Admins.FirstOrDefaultAsync(u => u.Username == request.Email);
+            if (admin == null)
             {
                 return new AdminLoginResponse
                 {
@@ -51,7 +51,7 @@ namespace mapis.Services
             };
         }
 
-        public async Task<UpdateApplicantResponse> ApproveApplication(UpdateAplicantStatus request)
+        public async Task<UpdateApplicantResponse> ApproveApplication(UserIdentifier request)
         {
             try
             {
@@ -65,7 +65,6 @@ namespace mapis.Services
                         Message = "Application Number Invalid"
                     };
                 }
-
                 if (applicant.IsApproved)
                 {
                     return new UpdateApplicantResponse
@@ -74,20 +73,12 @@ namespace mapis.Services
                         Message = "Application Already Approved"
                     };
                 }
-
-
                 applicant.IsApproved = true;
-
-
                 var ciltUser = _mapper.Map<CILTUser>(applicant);
-
                 ciltUser.MemberId = GenerateId();
                 ciltUser.ProfileImage = "123456";
                 await _context.CiltUser.AddAsync(ciltUser);
-
-
                 await _context.SaveChangesAsync();
-
                 return new UpdateApplicantResponse
                 {
                     StatusCode = 200,
@@ -111,6 +102,27 @@ namespace mapis.Services
             var applicantsInfo = _mapper.Map<List<ApplicantsInfo>>(applicants);
             return applicantsInfo;
         }
+
+        public async Task<ApplicantsResponseInfo<ApplicantsInfo>> GetApplicantsInfo(UserIdentifier request)
+        {
+            var applicant = await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == request.ApplicantId);
+            if (applicant == null)
+            {
+                _logger.LogError("An error Occured");
+                return new ApplicantsResponseInfo<ApplicantsInfo>
+                {
+                    StatusCode = 404,
+                    Data = null,
+                    Message = "Could not find a User With that Application Id"
+                };
+            }
+            return new ApplicantsResponseInfo<ApplicantsInfo>
+            {
+                StatusCode = 200,
+                Data = _mapper.Map<ApplicantsInfo>(applicant)
+            };
+        }
+
         private string CreateToken(Administrators admin)
         {
             var claims = new List<Claim>{
@@ -118,13 +130,13 @@ namespace mapis.Services
                 new Claim(ClaimTypes.Role,admin.Role),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("AppSettings:Token")!));
-            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new JwtSecurityToken(
-                issuer:_configuration.GetValue<string>(""),
-                audience : _configuration.GetValue<string>(""),
+                issuer: _configuration.GetValue<string>(""),
+                audience: _configuration.GetValue<string>(""),
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
-                signingCredentials:creds
+                signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
@@ -132,7 +144,14 @@ namespace mapis.Services
         {
             return Guid.NewGuid().ToString();
         }
-
+        private string CreateUserName(Applicants applicants)
+        {
+            return "";
+        }
+        private string CreateUserPassword()
+        {
+            return "";
+        }
     }
 
 

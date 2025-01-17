@@ -22,25 +22,16 @@ namespace mapis.Domain
         public bool IsApproved {get;set;}
        public DateTime DateApplied {get;set;}
     }
-
-    public class UpdateAplicantStatus
+    public class UserIdentifier
     {
         public Guid ApplicantId {get;set;}
     }
-    public class UpdateApplicantResponse 
-    {
-        public int StatusCode {get;set;}
-        public string Message {get;set;}
-    }
-    public class AdminLoginResponse
-    {
-        public int StatusCode {get;set;}
-        public string Message {get;set;}
-        public string? AccessToken {get;set;}
-    }
+    
+    
     public class AdminLoginRequest
     {
         public required string Email {get;set;}
         public required string Password {get;set;}
     }
+    
 }

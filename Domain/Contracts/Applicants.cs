@@ -20,12 +20,7 @@ namespace mapis.Domain
         public string BranchWant { get; set; }
     }
 
-    public class ApplyResponse
-    {
-        public int StatusCode {get;set;}
-        public string Message {get;set;}
-        public Guid? ApplicantId {get;set;}
-    }
+    
 
     public class CheckStatus
     {

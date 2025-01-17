@@ -20,8 +20,8 @@ namespace mapis.Controllers
             return Ok(response);
         }
 
-        [HttpPut("update_status")]
-        public async Task<ActionResult> UpdateApplicantStatus(UpdateAplicantStatus request)
+        [HttpPut("approve_application")]
+        public async Task<ActionResult> ApproveApplicantApplication(UserIdentifier request)
         {
             var response =await _adminService.ApproveApplication(request);
             if(response.StatusCode != 200)
@@ -35,6 +35,17 @@ namespace mapis.Controllers
         public async Task<ActionResult> AdminAcess(AdminLoginRequest request)
         {
             return Ok();
+        }
+
+        [HttpPost("applicants_info")]
+        public async Task<ActionResult<ApplicantsResponseInfo<ApplicantsInfo>>> GetApplicantDetails(UserIdentifier request)
+        {
+            var response = await _adminService.GetApplicantsInfo(request);
+            if(response.StatusCode != 200)
+            {
+                return response;
+            }
+            return response;
         }
 
     }
