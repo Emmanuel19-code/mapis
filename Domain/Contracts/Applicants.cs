@@ -2,7 +2,7 @@ namespace mapis.Domain
 {
     public class ApplyDetails
     {
-        public string ProfileImage {get;set;}
+        public IFormFile ProfileImage {get;set;}
         public required string FirstName { get; set; }
         public string? MiddleName { get; set; }
         public required string LastName { get; set; }

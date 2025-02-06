@@ -32,9 +32,10 @@ namespace mapis.Services
                     Message = "A User with This Name is Available"
                 };
             }
+            var image = await UploadFile(request.ProfileImage);
             var ApplicationDetails = new Applicants
             {
-
+                ProfileImage  = image,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 MiddleName = request.MiddleName,
@@ -56,7 +57,7 @@ namespace mapis.Services
             {
                 StatusCode = 200,
                 Message = "Application Submitted Check Your Mail",
-                //ApplicantId = ApplicationDetails.ApplicantId
+                ApplicantId = ApplicationDetails.ApplicantId
             };
         }
 
@@ -84,6 +85,23 @@ namespace mapis.Services
                 StatusCode = 200,
                 Message = "Application Approved"
             };
+        }
+
+        private async Task<string> UploadFile(IFormFile profileImage)
+        {
+            string filePath = string.Empty;
+            if(profileImage != null)
+            {
+                var imageFolderPath = Path.Combine("Upload","images");
+                Directory.CreateDirectory(imageFolderPath);
+                var imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(profileImage.FileName);
+                filePath = Path.Combine(imageFolderPath,imageFileName);
+                using (var stream = new FileStream(filePath,FileMode.Create))
+                {
+                    await profileImage.CopyToAsync(stream);
+                }
+            }
+            return filePath;
         }
     }
 }

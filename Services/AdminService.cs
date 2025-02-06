@@ -74,6 +74,8 @@ namespace mapis.Services
                     };
                 }
                 applicant.IsApproved = true;
+                var username = CreateUserName(applicant);
+                Console.WriteLine(username);
                 var ciltUser = _mapper.Map<CILTUser>(applicant);
                 ciltUser.MemberId = GenerateId();
                 ciltUser.ProfileImage = "123456";
@@ -146,7 +148,9 @@ namespace mapis.Services
         }
         private string CreateUserName(Applicants applicants)
         {
-            return "";
+            var random = new Random();
+            var randomNumber = random.Next(1000,9999);
+            return $"{applicants.FirstName}{randomNumber}";
         }
         private string CreateUserPassword()
         {
