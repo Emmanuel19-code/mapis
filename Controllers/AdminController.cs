@@ -20,10 +20,10 @@ namespace mapis.Controllers
             return Ok(response);
         }
 
-        [HttpPut("approve_application")]
-        public async Task<ActionResult> ApproveApplicantApplication(UserIdentifier request)
+        [HttpPut("approve_application/{applicationId}")]
+        public async Task<ActionResult> ApproveApplicantApplication(Guid applicationId)
         {
-            var response =await _adminService.ApproveApplication(request);
+            var response =await _adminService.ApproveApplication(applicationId);
             if(response.StatusCode != 200)
             {
                 return BadRequest(response);
@@ -37,10 +37,10 @@ namespace mapis.Controllers
             return Ok();
         }
 
-        [HttpPost("applicants_info")]
-        public async Task<ActionResult<ApplicantsResponseInfo<ApplicantsInfo>>> GetApplicantDetails(UserIdentifier request)
+        [HttpGet("applicants_info/{applicationId}")]
+        public async Task<ActionResult<ApplicantsResponseInfo<ApplicantsInfo>>> GetApplicantDetails(Guid applicationId)
         {
-            var response = await _adminService.GetApplicantsInfo(request);
+            var response = await _adminService.GetApplicantsInfo(applicationId);
             if(response.StatusCode != 200)
             {
                 return response;

@@ -13,7 +13,7 @@ namespace mapis.Controllers
         _applicantsService = applicantsService;
       }
      [HttpPost("apply")]
-      public async Task<ActionResult<ApplyResponse>> MemberApplication(ApplyDetails request)
+      public async Task<ActionResult<ApplyResponse>> MemberApplication( ApplyDetails request)
       {
         var response = await _applicantsService.ApplicantsApply(request);
         if(response.StatusCode != 200)

@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -51,11 +52,11 @@ namespace mapis.Services
             };
         }
 
-        public async Task<UpdateApplicantResponse> ApproveApplication(UserIdentifier request)
+        public async Task<UpdateApplicantResponse> ApproveApplication(Guid applicationId)
         {
             try
             {
-                var applicant = await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == request.ApplicantId);
+                var applicant = await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == applicationId);
 
                 if (applicant == null)
                 {
@@ -75,16 +76,22 @@ namespace mapis.Services
                 }
                 applicant.IsApproved = true;
                 var username = CreateUserName(applicant);
-                Console.WriteLine(username);
                 var ciltUser = _mapper.Map<CILTUser>(applicant);
-                ciltUser.MemberId = GenerateId();
-                ciltUser.ProfileImage = "123456";
+                ciltUser.MemberId = GenerateUserId();
+
+                var UserCredentials = new CILTUserAuth
+                {
+                    CILTUserId = ciltUser.MemberId,
+                    Email = applicant.Email,
+                    Password = CreateUserPassword()
+                };
                 await _context.CiltUser.AddAsync(ciltUser);
+                await _context.CILTUserAuths.AddAsync(UserCredentials);
                 await _context.SaveChangesAsync();
                 return new UpdateApplicantResponse
                 {
                     StatusCode = 200,
-                    Message = "Application Approved"
+                    Message = $"Application Approved {username} "
                 };
             }
             catch (Exception ex)
@@ -105,9 +112,9 @@ namespace mapis.Services
             return applicantsInfo;
         }
 
-        public async Task<ApplicantsResponseInfo<ApplicantsInfo>> GetApplicantsInfo(UserIdentifier request)
+        public async Task<ApplicantsResponseInfo<ApplicantsInfo>> GetApplicantsInfo(Guid applicationId)
         {
-            var applicant = await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == request.ApplicantId);
+            var applicant = await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == applicationId);
             if (applicant == null)
             {
                 _logger.LogError("An error Occured");
@@ -142,20 +149,46 @@ namespace mapis.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
-        private string GenerateId()
-        {
-            return Guid.NewGuid().ToString();
-        }
         private string CreateUserName(Applicants applicants)
         {
             var random = new Random();
-            var randomNumber = random.Next(1000,9999);
+            var randomNumber = random.Next(1000, 9999);
             return $"{applicants.FirstName}{randomNumber}";
+        }
+        private void SaveCounterToFile(int counter)
+        {
+            File.WriteAllText("counter.txt", counter.ToString());
+        }
+        public int GetCounterFromFile()
+        {
+            if (!File.Exists("counter.txt"))
+            {
+                return 1;
+            }
+            string counterValue = File.ReadAllText("counter.txt");
+            return int.TryParse(counterValue, out int counter) ? counter : 1;
+        }
+        public string GenerateUserId()
+        {
+            string yearOfRegistration = DateTime.Now.Year.ToString();
+            int counter = GetCounterFromFile();
+            string userID = counter.ToString("D4") + yearOfRegistration;
+            SaveCounterToFile(counter + 1);
+            return userID;
         }
         private string CreateUserPassword()
         {
-            return "";
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            int passwordLength = 8;
+            Random random = new Random();
+            var password = new char[passwordLength];
+            for (int i = 0; i < passwordLength; i++)
+            {
+                password[i] = chars[random.Next(chars.Length)];
+            }
+            return new string(password);
         }
+
     }
 
 

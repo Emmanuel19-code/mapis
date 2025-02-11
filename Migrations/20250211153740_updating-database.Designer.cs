@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mapis.Infrastructure;
 
@@ -11,9 +12,11 @@ using mapis.Infrastructure;
 namespace mapis.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250211153740_updating-database")]
+    partial class updatingdatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,7 +225,7 @@ namespace mapis.Migrations
                     b.Property<DateTime>("LastLoggedIn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastPasswordChange")
+                    b.Property<DateTime>("LastPassordChange")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")

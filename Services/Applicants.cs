@@ -14,7 +14,9 @@ namespace mapis.Services
         }
         public async Task<ApplyResponse> ApplicantsApply(ApplyDetails request)
         {
+            Console.WriteLine("hello",request.CurrentMemberShipBranch);
             var existEmail =await _applicationDbContext.Applicants.FirstOrDefaultAsync(a => a.Email == request.Email);
+            Console.WriteLine(existEmail);
             if (existEmail != null)
             {
                 return new ApplyResponse
@@ -33,16 +35,23 @@ namespace mapis.Services
                 };
             }
             var image = await UploadFile(request.ProfileImage);
+            Console.WriteLine("this is",request.MemberType);
             var ApplicationDetails = new Applicants
             {
                 ProfileImage  = image,
+                Title = request.Title,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 MiddleName = request.MiddleName,
+                MemberType = request.MemberType,
+                DateofBirth = request.DateofBirth,
                 Email = request.Email,
                 Country = request.Country,
+                HomeAddress = request.HomeAddress,
                 PhoneOne = request.PhoneOne,
                 PhoneTwo = request.PhoneTwo,
+                CurrentCompany = request.CurrentCompany,
+                DateStartedWorking = request.DateStartedWorking,
                 BusinessAddress = request.BusinessAddress,
                 CurrentJobTitle = request.CurrentJobTitle,
                 DateJoinedOrganisation = request.DateJoinedOrganisation,
@@ -56,7 +65,7 @@ namespace mapis.Services
             return new ApplyResponse
             {
                 StatusCode = 200,
-                Message = "Application Submitted Check Your Mail",
+                Message = $"Application Submitted Successfully.On Approval of Application You will receive access details to the portal",
                 ApplicantId = ApplicationDetails.ApplicantId
             };
         }

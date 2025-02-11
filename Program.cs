@@ -3,6 +3,7 @@ using mapis.Infrastructure;
 using mapis.Services;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,18 @@ builder.Services.AddScoped<IApplicantsService, ApplicantService>();
 builder.Services.AddScoped<IAdminService, AdminServices>();
 
 // Register AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));  
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin() // Allow all origins
+              .AllowAnyMethod() 
+              .AllowAnyHeader(); 
+    });
+});
 
 var app = builder.Build();
 
@@ -31,7 +43,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseSwagger();
 }
-
+//Serving Static Files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Upload")),
+    RequestPath = "/Upload"
+});
+app.UseCors("AllowAllOrigins"); // Apply the CORS policy that allows all origins
 app.UseHttpsRedirection();
 app.MapControllers();
 
