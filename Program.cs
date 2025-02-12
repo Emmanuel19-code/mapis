@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 
 // Register DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase"),sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Register services
 builder.Services.AddScoped<IApplicantsService, ApplicantService>();
