@@ -1,16 +1,19 @@
 using mapis.Domain;
 using mapis.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-
+using mapis.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace mapis.Services
 {
     public class ApplicantService : IApplicantsService
     {
         private readonly ApplicationDbContext _applicationDbContext;
-        public ApplicantService(ApplicationDbContext applicationDbContext)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public ApplicantService(ApplicationDbContext applicationDbContext,IHubContext<NotificationHub> hubContext)
         {
             _applicationDbContext = applicationDbContext;
+            _hubContext = hubContext;
         }
         public async Task<ApplyResponse> ApplicantsApply(ApplyDetails request)
         {
@@ -60,8 +63,16 @@ namespace mapis.Services
                 LastPaymentYear = request.LastPaymentYear,
                 BranchWant = request.BranchWant,
             };
+            var notification = new Notifications
+            {
+                Title = "Registration Notice",
+                Message = $"A new application received with {ApplicationDetails.ApplicantId}"
+            };
             await _applicationDbContext.Applicants.AddAsync(ApplicationDetails);
+            await _applicationDbContext.Notifications.AddAsync(notification);
             await _applicationDbContext.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("Registration", $"A new application received with Id {ApplicationDetails.ApplicantId}");
+
             return new ApplyResponse
             {
                 StatusCode = 200,

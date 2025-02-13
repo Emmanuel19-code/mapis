@@ -16,7 +16,7 @@ namespace mapis.Infrastructure
         public DbSet<EventRegistration> RegisterEvents { get; set; }
         public DbSet<Applicants> Applicants { get; set; }
         public DbSet<Administrators> Admins { get; set; }
-
+        public DbSet<Notifications> Notifications {get;set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CILTUserAuth>()

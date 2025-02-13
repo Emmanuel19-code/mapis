@@ -189,6 +189,17 @@ namespace mapis.Services
             return new string(password);
         }
 
+        public async Task<List<Notification>> GetNotification()
+        {
+            var notification = await _context.Notifications.Select(e=>new Notification
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Message = e.Message,
+                CreatedAt = e.Created
+            }).ToListAsync();
+            return notification;
+        }
     }
 
 

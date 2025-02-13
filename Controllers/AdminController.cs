@@ -48,5 +48,12 @@ namespace mapis.Controllers
             return response;
         }
 
+        [HttpGet("notifications")]
+        public async Task<List<Notification>> AllNotifications()
+        {
+            var response = await _adminService.GetNotification();
+            return response;
+        }
+
     }
 }

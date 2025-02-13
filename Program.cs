@@ -4,6 +4,7 @@ using mapis.Services;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.Extensions.FileProviders;
+using mapis.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddControllers();
 
 // Register DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase"),sqlOptions => sqlOptions.EnableRetryOnFailure()));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase"), sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Register services
 builder.Services.AddScoped<IApplicantsService, ApplicantService>();
@@ -23,16 +24,21 @@ builder.Services.AddScoped<IAdminService, AdminServices>();
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// Configure CORS
+// Configuring SignalR
+builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+    options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.AllowAnyOrigin() // Allow all origins
-              .AllowAnyMethod() 
-              .AllowAnyHeader(); 
+        policy.WithOrigins("http://localhost:3000","http://localhost:3001") // Allow only the React frontend
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // Allow credentials
     });
 });
+
+
 
 var app = builder.Build();
 
@@ -43,14 +49,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseSwagger();
 }
-//Serving Static Files
+
+// Serving Static Files
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Upload")),
     RequestPath = "/Upload"
 });
-app.UseCors("AllowAllOrigins"); // Apply the CORS policy that allows all origins
+
+app.UseCors("AllowSpecificOrigins"); // Apply the CORS policy that allows specific origins
+
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/Notification");
 
 app.Run();

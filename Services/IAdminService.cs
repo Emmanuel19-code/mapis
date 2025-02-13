@@ -8,5 +8,6 @@ namespace mapis.Services
         Task<UpdateApplicantResponse> ApproveApplication(Guid applicationId);
         Task<AdminLoginResponse> AdminLogin(AdminLoginRequest request);
         Task<ApplicantsResponseInfo<ApplicantsInfo>> GetApplicantsInfo(Guid applicationId);
+        Task<List<Notification>> GetNotification();
     }
 }
