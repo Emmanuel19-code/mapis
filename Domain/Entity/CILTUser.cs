@@ -7,6 +7,7 @@ namespace mapis.Domain
     {
         [Key]
         public required string MemberId {get;set;}
+        public string Title {get;set;}
         public required string FirstName {get;set;}
         public string? MiddleName {get;set;}
         public required string LastName {get;set;}
@@ -23,6 +24,7 @@ namespace mapis.Domain
         public string CurrentMemberShipBranch {get;set;}
         public int LastPaymentYear {get;set;}
         public string BranchWant {get;set;}
+        
         public bool IsApproved { get; set; }  
         public CILTUserAuth CILTUserAuth { get; set; }
     }

@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Host.ConfigureLogging();
 
 var app = builder.Build();
 

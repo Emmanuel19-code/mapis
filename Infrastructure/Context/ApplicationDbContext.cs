@@ -17,6 +17,7 @@ namespace mapis.Infrastructure
         public DbSet<Applicants> Applicants { get; set; }
         public DbSet<Administrators> Admins { get; set; }
         public DbSet<Notifications> Notifications {get;set;}
+        public DbSet<Complains> Complains {get;set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CILTUserAuth>()

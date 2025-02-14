@@ -53,4 +53,16 @@ namespace mapis.Domain
     {
         public required Guid CILTUserId  {get;set;}
     }
+    public class UserInformation 
+    {
+        public  string Title {get;set;}
+        public required string FirstName { get; set; }
+        public string? MiddleName { get; set; }
+        public required string LastName { get; set; }
+        public string? MemberId { get; set; }
+        public string? MemberType { get; set; }
+        public required string Email { get; set; }
+        public required string Country { get; set; }
+        public required string PhoneOne { get; set; }
+    }
 }

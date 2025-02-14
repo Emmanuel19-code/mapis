@@ -55,5 +55,11 @@ namespace mapis.Controllers
             return response;
         }
 
+        [HttpGet("all_members")]
+        public async Task<List<UserInformation>> ApprovedMembers()
+        {
+            var response = await _adminService.AllMembers();
+            return response;
+        }
     }
 }

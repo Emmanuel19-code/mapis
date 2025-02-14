@@ -9,5 +9,6 @@ namespace mapis.Services
         Task<UserDetails> GetUserDetails(GetUserDetailsInfo request);
         Task UpdatePassord();
         Task<List<AllEvents>> GetRegisteredEvents(UserEventsRegistered request);
+        Task<CreatedResponse> MakeComplain(ComplainDto request);
     }
 }

@@ -191,7 +191,7 @@ namespace mapis.Services
 
         public async Task<List<Notification>> GetNotification()
         {
-            var notification = await _context.Notifications.Select(e=>new Notification
+            var notification = await _context.Notifications.Select(e => new Notification
             {
                 Id = e.Id,
                 Title = e.Title,
@@ -200,6 +200,24 @@ namespace mapis.Services
             }).ToListAsync();
             return notification;
         }
+
+        public async Task<List<UserInformation>> AllMembers()
+        {
+            var members = await _context.CiltUser.Select(m => new UserInformation
+            {
+                Title = m.Title,
+                MemberId = m.MemberId,
+                Email = m.Email,
+                FirstName = m.FirstName,
+                MiddleName = m.MiddleName,
+                LastName = m.LastName,
+                MemberType = m.MemberType,
+                Country = m.Country,
+                PhoneOne = m.PhoneOne
+            }).ToListAsync();
+            return members;
+        }
+
     }
 
 
