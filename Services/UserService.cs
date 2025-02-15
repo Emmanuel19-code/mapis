@@ -4,11 +4,7 @@ namespace mapis.Services
 {
     public class UserService : IUserService
     {
-        public Task<CreatedResponse> CreateAccount(BeComeMember request)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public Task<List<AllEvents>> GetRegisteredEvents(UserEventsRegistered request)
         {
             throw new NotImplementedException();

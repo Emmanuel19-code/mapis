@@ -2,9 +2,9 @@ using mapis.Domain;
 using mapis.Infrastructure;
 using mapis.Services;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 using Microsoft.Extensions.FileProviders;
 using mapis.Hubs;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,14 +27,20 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Configuring SignalR
 builder.Services.AddSignalR();
 
+//configuring logger
+builder.Host.ConfigureLogging();
+Log.Logger = new LoggerConfiguration()
+             .WriteTo.Console()
+             .CreateLogger();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:3000","http://localhost:3001") // Allow only the React frontend
+        policy.WithOrigins("http://localhost:3000","http://localhost:3001") 
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .AllowCredentials(); // Allow credentials
+              .AllowCredentials(); 
     });
 });
 
@@ -57,7 +63,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Upload"
 });
 
-app.UseCors("AllowSpecificOrigins"); // Apply the CORS policy that allows specific origins
+app.UseCors("AllowSpecificOrigins"); 
 
 app.UseHttpsRedirection();
 app.MapControllers();
