@@ -38,7 +38,7 @@ namespace mapis.Services
                 };
             }
             var image = await UploadFile(request.ProfileImage);
-            Console.WriteLine("this is",request.MemberType);
+           // Console.WriteLine("this is",request.MemberType);
             var ApplicationDetails = new Applicants
             {
                 ProfileImage  = image,

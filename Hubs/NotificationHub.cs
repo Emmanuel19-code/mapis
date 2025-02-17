@@ -8,5 +8,10 @@ namespace mapis.Hubs
         {
             await Clients.All.SendAsync("Registration",$"A new application Received with {applicationId}");
         }
+
+        public async Task NewEventNotice()
+        {
+            await Clients.All.SendAsync("newEvent","")
+        } 
     }
 }

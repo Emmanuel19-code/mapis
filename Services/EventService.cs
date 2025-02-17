@@ -4,9 +4,26 @@ namespace mapis.Services
 {
     public class EventService : IEventService
     {
-        public Task<CreatedResponse> AddEvent(UploadEvent request)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly ApplicationDbContext _context
+        public EventService(IHubContext<NotificationHub> hubContext,ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _hubContext = hubContext;
+            _context = context;
+        }
+        public async Task<CreatedResponse> AddEvent(UploadEvent request)
+        {
+             if(request == null)
+             {
+                return new CreatedResponse
+                {
+                    Success= false,
+                    StatusCode =400,
+                    Message = "Provide All Details"
+                }
+             }
+             var eventAvailable = await _context.Events.FirstOrDefaultAsync(e=>);
+            _hubContext.Clients.All.SendAsync("eventNotice","A new Event Has been Uploaded")
         }
 
         public Task<List<AllEvents>> GetEvents()

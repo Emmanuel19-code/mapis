@@ -19,6 +19,7 @@ namespace mapis.Services
             throw new NotImplementedException();
         }
 
+        
         public Task<List<AllEvents>> GetRegisteredEvents(UserEventsRegistered request)
         {
             throw new NotImplementedException();
