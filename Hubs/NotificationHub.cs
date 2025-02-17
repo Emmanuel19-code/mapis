@@ -11,7 +11,7 @@ namespace mapis.Hubs
 
         public async Task NewEventNotice()
         {
-            await Clients.All.SendAsync("newEvent","")
+            await Clients.All.SendAsync("newEvent","");
         } 
     }
 }

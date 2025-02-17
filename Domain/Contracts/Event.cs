@@ -39,7 +39,7 @@ namespace mapis.Domain
 
     public class RegisterEvent
     {
-        public Guid CILTUserId { get; set; }
+        public required string CILTUserId { get; set; }
     }
     public class RegisteringEvent
     {

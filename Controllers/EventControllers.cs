@@ -8,16 +8,23 @@ namespace mapis.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
+        private readonly IEventService _eventService;
+        public EventController(IEventService eventService)
+        {
+            _eventService = eventService;
+        }
         
         [HttpPost("addEvents")]
-        public async Task<ActionResult> UploadEvent(UploadEvent request)
+        public async Task<CreatedResponse> UploadEvent(UploadEvent request)
         {
-            return Ok();
+           var response = await _eventService.AddEvent(request);
+           return response;
         }
         [HttpGet("allEvents")]
-        public async Task<ActionResult<IEnumerable<AllEvents>>> GetAllEvents()
+        public async Task<List<AllEvents>> GetAllEvents()
         {
-           return Ok();
+           var events = await _eventService.GetEvents();
+           return events;
         }
 
        [HttpPut("updateEvent/{eventId}")]
@@ -27,9 +34,10 @@ namespace mapis.Controllers
         }
 
         [HttpPost("registerEvent/{eventId}")]
-        public async Task<ActionResult> RegisterEvent(Guid eventId,[FromBody]RegisterEvent request)
+        public async Task<CreatedResponse> RegisterEvent(Guid eventId,[FromBody]RegisterEvent request)
         {
-            return Ok();
+            var response = await _eventService.RegisterEvent(eventId,request);
+            return response;
         }
        
     }

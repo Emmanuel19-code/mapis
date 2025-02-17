@@ -20,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register services
 builder.Services.AddScoped<IApplicantsService, ApplicantService>();
 builder.Services.AddScoped<IAdminService, AdminServices>();
+builder.Services.AddScoped<IEventService,EventService>();
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -28,7 +29,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddSignalR();
 
 //configuring logger
-builder.Host.ConfigureLogging();
+//builder.Host.ApplicationLoggerConfiguration();
 Log.Logger = new LoggerConfiguration()
              .WriteTo.Console()
              .CreateLogger();
@@ -44,7 +45,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Host.ConfigureLogging();
+
 
 var app = builder.Build();
 

@@ -50,6 +50,3 @@ ScaffoldingReadMe.txt
 *.msm
 *.msp
 
-# ASP.NET Core
-appsettings.json
-appsettings.Development.json

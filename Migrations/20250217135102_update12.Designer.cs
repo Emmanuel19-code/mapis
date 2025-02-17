@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mapis.Infrastructure;
 
@@ -11,9 +12,11 @@ using mapis.Infrastructure;
 namespace mapis.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250217135102_update12")]
+    partial class update12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,8 +281,10 @@ namespace mapis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CILTUserId")
-                        .IsRequired()
+                    b.Property<Guid>("CILTUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CILTUserMemberId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("EventId")
@@ -287,7 +292,7 @@ namespace mapis.Migrations
 
                     b.HasKey("EventRegistrationId");
 
-                    b.HasIndex("CILTUserId");
+                    b.HasIndex("CILTUserMemberId");
 
                     b.HasIndex("EventId");
 
@@ -377,9 +382,7 @@ namespace mapis.Migrations
                 {
                     b.HasOne("mapis.Domain.CILTUser", "CILTUser")
                         .WithMany()
-                        .HasForeignKey("CILTUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CILTUserMemberId");
 
                     b.HasOne("mapis.Domain.Events", "Event")
                         .WithMany()
